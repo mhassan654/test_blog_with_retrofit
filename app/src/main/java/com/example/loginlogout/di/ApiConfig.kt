@@ -5,45 +5,30 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import kotlinx.coroutines.flow.first
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
-import okhttp3.Response
-
+import com.example.loginlogout.responses.LoginResponse
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name="auth_token")
 
-data class TokenResponse(val token: String)
-
-
-
-class AuthenticationService(private val context: Context)
+class ApiConfig()
 {
-    private lateinit var api:ApiService
+    private lateinit var api: ApiService
 
     init {
-        val client = OkHttpClient().Builder()
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://192.168.0.106:8000/api/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        api = retrofit.create(ApiService::class.java)
     }
 
-    private inner class AuthInterceptor:Interceptor{
-        override fun intercept(chain: Interceptor.Chain): Response {
-            val originalRequest = chain.request()
-            val token = getToken()
-
-            val authenticationRequest = originalRequest.newBuilder()
-                .header("Authorization", "Bearer $token")
-                .build()
-
-            return chain.proceed(authenticationRequest)
-        }
-
+    suspend fun getLoginResponse(email: String, password: String): LoginResponse {
+        val res = api.login(email,password)
+        print(res)
+        return res
     }
-
-     suspend fun getToken():String?{
-        val preferences = context.dataStore.data.first()
-        return preferences[AUTH_TOKEN_KEY]
-    }
-
 
     companion object{
         private val AUTH_TOKEN_KEY = stringPreferencesKey("auth_token")
