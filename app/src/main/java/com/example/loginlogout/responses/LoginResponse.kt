@@ -8,7 +8,8 @@ data class LoginResponse(
     val user: User,
     val token: String
 ) {
-    data class User(
+
+   public final data class User(
         val id: Int,
         val name: String,
         val email: String,
@@ -17,6 +18,7 @@ data class LoginResponse(
         val createdAt: String,
         val updatedAt: String
     )
+
 }
 
 

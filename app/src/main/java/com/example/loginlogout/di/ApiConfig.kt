@@ -17,7 +17,7 @@ class ApiConfig()
 
     init {
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.0.106:8000/api/")
+            .baseUrl("http://192.168.59.1:8000/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -25,9 +25,7 @@ class ApiConfig()
     }
 
     suspend fun getLoginResponse(email: String, password: String): LoginResponse {
-        val res = api.login(email,password)
-        print(res)
-        return res
+        return api.login(email, password)
     }
 
     companion object{

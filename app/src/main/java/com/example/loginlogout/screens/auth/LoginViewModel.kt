@@ -27,7 +27,7 @@ class LoginViewModel (
     suspend fun login(email: String, password: String): Response {
         return try {
             val response = getLoginResponse(email, password)
-            print(response)
+            println(response.token)
             Response.User(response.user)
         } catch (e: Exception) {
             Response.Error(e.message ?: "Login failed")
