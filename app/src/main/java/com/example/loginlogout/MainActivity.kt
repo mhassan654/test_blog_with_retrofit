@@ -68,8 +68,8 @@ fun Navigation() {
 //            LoginScreen(viewModel =
 //            })
 //        }
-        composable(NavGraph.home) {
-            HomeScreen(AuthService.currentUser ?: return)
-        }
+//        composable(NavGraph.home) {
+//            HomeScreen(AuthService.currentUser ?: return)
+//        }
     }
 }
