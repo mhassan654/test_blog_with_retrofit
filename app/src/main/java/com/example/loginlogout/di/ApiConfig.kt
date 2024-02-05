@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.loginlogout.responses.LoginResponse
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -17,14 +18,14 @@ class ApiConfig()
 
     init {
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.59.1:8000/api/")
+            .baseUrl("http://192.168.0.118:8000/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         api = retrofit.create(ApiService::class.java)
     }
 
-    suspend fun getLoginResponse(email: String, password: String): LoginResponse {
+    suspend fun getLoginResponse(email: String, password: String): Response<LoginResponse> {
         return api.login(email, password)
     }
 

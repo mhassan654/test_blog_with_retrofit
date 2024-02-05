@@ -1,5 +1,6 @@
 package com.example.loginlogout.screens.auth
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -49,19 +50,19 @@ fun LoginScreen(viewModel: LoginViewModel) {
             onClick = {
 //                loginState.value = loginState.
                 viewModel.viewModelScope.launch {
+
                     val response = viewModel.login(emailState.value, passwordState.value)
-
-                    when(response){
-                        is Response.User->{
-                            println(response)
-//                            HomeScreen(user = Response.Success)
+                    if (response.isSuccessful){
+                        val loginResponse = response.body()
+                        val user = loginResponse?.user
+                        val token = loginResponse?.token
+                        // Now you can use 'user' and 'token' as needed
+                        Log.d("User", user.toString())
+                        if (token != null) {
+                            Log.d("Token", token)
                         }
-
-                        is Response.Error->{
-                            println(response)
-                        }
-
-                        else -> {}
+                    }else{
+                        Log.d("login errors", response.errorBody().toString())
                     }
                 }
             },
@@ -71,7 +72,6 @@ fun LoginScreen(viewModel: LoginViewModel) {
         ) {
             Text(text = "Login")
         }
-
 
     }
 }
